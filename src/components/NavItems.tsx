@@ -20,9 +20,11 @@ export const NavItems = () => {
 		};
 
 		if (isAnyOpen) {
-			window.addEventListener("keyup", handler);
+			window.addEventListener("keydown", handler);
 		}
-		return window.removeEventListener("keyup", handler);
+		return () => {
+			window.removeEventListener("keydown", handler);
+		};
 	}, [isAnyOpen]);
 
 	return (
