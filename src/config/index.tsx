@@ -15,9 +15,9 @@ export const PRODUCT_CATEGIES = [
 		value: "icons" as const,
 		featured: [
 			{
-				name: "editor picks",
+				name: "icons picks",
 				href: "#",
-				imageSrc: "/nav/ui-kits/mixed.jpg",
+				imageSrc: "/nav/icons/bestsellers.jpg",
 			},
 		],
 	},
