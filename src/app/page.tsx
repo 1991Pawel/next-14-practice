@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowDownToLineIcon, CheckCircle, Leaf } from "lucide-react";
-import { MaxWithWrapper } from "@/components/MaxWidthWrapper";
+import { MaxWidthWrapper } from "@/components/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 
 const perks = [
@@ -23,7 +23,7 @@ const perks = [
 export default function Home() {
 	return (
 		<>
-			<MaxWithWrapper>
+			<MaxWidthWrapper>
 				<div className="mx-auto flex max-w-3xl flex-col items-center py-20 text-center">
 					<h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
 						Welcome Lorem ipsum dolor sit amet.{" "}
@@ -41,9 +41,9 @@ export default function Home() {
 						<Button variant="ghost">our quality is good &rarr;</Button>
 					</div>
 				</div>
-			</MaxWithWrapper>
+			</MaxWidthWrapper>
 			<section className="border-t border-gray-200 bg-gray-50">
-				<MaxWithWrapper className="py-20">
+				<MaxWidthWrapper className="py-20">
 					<div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
 						{perks.map((perk) => (
 							<div
@@ -62,7 +62,7 @@ export default function Home() {
 							</div>
 						))}
 					</div>
-				</MaxWithWrapper>
+				</MaxWidthWrapper>
 			</section>
 		</>
 	);
