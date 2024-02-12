@@ -1,6 +1,6 @@
 import express from "express";
-import { getPayloadClient } from "@/get-payload";
-import { nextHandler } from "@/next-utils";
+import { getPayloadClient } from "./get-payload";
+import { nextApp, nextHandler } from "./next-utils";
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -9,16 +9,17 @@ const start = async () => {
 		initOptions: {
 			express: app,
 			onInit: async (cms) => {
-				cms.logger.info(`Admin URL ${cms.getAdminURL()}`);
+				cms.logger.info(`Admin url ${cms.getAdminURL}`);
 			},
 		},
 	});
 	app.use((req, res) => nextHandler(req, res));
+
 	nextApp.prepare().then(() => {
-		payload.logger.info("Next js started");
-	});
-	app.listen(PORT, async () => {
-		payload.logger.info(`Next.js App url ${process.env.NEXT_PUBLIC.SERVER_URL}`);
+		payload.logger.info("nxt");
+		app.listen(PORT, async () => {
+			payload.logger.info("next process");
+		});
 	});
 };
 

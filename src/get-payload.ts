@@ -2,7 +2,6 @@ import path from "path";
 import dotenv from "dotenv";
 import type { InitOptions } from "payload/config";
 import payload, { type Payload } from "payload";
-// import nodemailer from 'nodemailer'
 
 dotenv.config({
 	path: path.resolve(__dirname, "../.env"),
@@ -25,8 +24,17 @@ export const getPayloadClient = async ({ initOptions }: Args = {}): Promise<Payl
 	if (!process.env.PAYLOAD_SECRET) {
 		throw new Error("PAYLOAD_SECRET is missing");
 	}
+
 	if (cached.client) {
 		return cached.client;
+	}
+
+	if (!cached.promise) {
+		cached.promise = payload.init({
+			secret: process.env.PAYLOAD_SECRET,
+			local: initOptions?.express ? false : true,
+			...(initOptions || {}),
+		});
 	}
 
 	try {

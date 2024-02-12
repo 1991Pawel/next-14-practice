@@ -1,7 +1,10 @@
+import path from "path";
 import { buildConfig } from "payload/config";
+import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { slateEditor } from "@payloadcms/richtext-slate";
-import { webpackBundler } from "@payloadcms/bundler-webpack";
+import dotenv from "dotenv";
+
 dotenv.config({
 	path: path.resolve(__dirname, "../.env"),
 });
@@ -10,10 +13,10 @@ export default buildConfig({
 	serverURL: process.env.NEXT_PUBLIC_SERVER_URL || "",
 	collections: [],
 	routes: {
-		admin: "sell",
+		admin: "/sell",
 	},
 	admin: {
-		user: "users",
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		bundler: webpackBundler(),
 		meta: {
 			titleSuffix: "- DigitalHippo",
@@ -21,13 +24,13 @@ export default buildConfig({
 			ogImage: "/thumbnail.jpg",
 		},
 	},
+	rateLimit: {
+		max: 2000,
+	},
 	editor: slateEditor({}),
 	db: mongooseAdapter({
 		url: process.env.MONGODB_URL!,
 	}),
-	rateLimit: {
-		max: 2000,
-	},
 	typescript: {
 		outputFile: path.resolve(__dirname, "payload-types.ts"),
 	},
