@@ -1,12 +1,33 @@
 "use client";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Icons } from "@/components/Icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+
+const AuthCredentialsValidator = z.object({
+	email: z.string().email(),
+	password: z.string().min(8, { message: "password must be at least 8 characters long." }),
+});
+
+type TAuthCredentialsValidator = z.infer<typeof AuthCredentialsValidator>;
+
 const Page = () => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<TAuthCredentialsValidator>({
+		resolver: zodResolver,
+	});
+
+	const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+		console.log(email, password);
+	};
 	return (
 		<>
 			<div className="iems-center container relative flex flex-col justify-center pt-20 lg:px-0">
@@ -26,14 +47,15 @@ const Page = () => {
 						</Link>
 					</div>
 					<div className="grid gap-6">
-						<form onSubmit={() => console.log("action")}>
+						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="grid gap-2">
 								<div className="grid gap-1 py-2">
 									<Label htmlFor="email">Email</Label>
 									<Input
+										{...register("email")}
 										placeholder="you@example.com"
 										className={cn({
-											"focus-visible:ring-red-500": true,
+											"focus-visible:ring-red-500": errors.email,
 										})}
 									/>
 								</div>
@@ -42,10 +64,11 @@ const Page = () => {
 								<div className="grid gap-1 py-2">
 									<Label htmlFor="password">Password</Label>
 									<Input
+										{...register("password")}
 										type="password"
 										placeholder="Password"
 										className={cn({
-											"focus-visible:ring-red-500": true,
+											"focus-visible:ring-red-500": errors.password,
 										})}
 									/>
 								</div>
@@ -60,3 +83,10 @@ const Page = () => {
 };
 
 export default Page;
+function zodResolver(
+	values: FieldValues,
+	context: any,
+	options: ResolverOptions<FieldValues>,
+): ResolverResult<FieldValues> | Promise<ResolverResult<FieldValues>> {
+	throw new Error("Function not implemented.");
+}
