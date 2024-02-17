@@ -8,6 +8,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/trpc/client";
 
 const AuthCredentialsValidator = z.object({
 	email: z.string().email(),
@@ -28,6 +29,10 @@ const Page = () => {
 	const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
 		console.log(email, password);
 	};
+
+	const {data} = trpc.anyApiRoute.useQuery()
+	console.log(data)
+	
 	return (
 		<>
 			<div className="iems-center container relative flex flex-col justify-center pt-20 lg:px-0">

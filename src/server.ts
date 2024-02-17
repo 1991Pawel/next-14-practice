@@ -21,12 +21,12 @@ const start = async () => {
 		},
 	});
 	app.use(
-		"/api/trpc",
+		'/api/trpc',
 		trpcExpress.createExpressMiddleware({
-			router: appRouter,
-			createContext,
-		}),
-	);
+		  router: appRouter,
+		  createContext,
+		})
+	  )
 
 	app.use((req, res) => nextHandler(req, res));
 
