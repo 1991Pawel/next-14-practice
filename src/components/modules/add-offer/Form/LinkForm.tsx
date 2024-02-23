@@ -37,7 +37,6 @@ export const LinkForm = ({ handleNextStep }: LinkFormProps) => {
 	});
 	const hrefIsFilled = watch("href")?.length >= 3;
 	const onSubmit = (data: Schema) => {
-		// console.log(data, "data");
 		setFormValues((prev) => ({
 			...prev,
 			...data,
