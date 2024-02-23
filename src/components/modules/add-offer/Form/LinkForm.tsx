@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useFormContext } from "@/context/FormContext";
 
 const schema = z.object({
 	href: z
@@ -13,22 +14,34 @@ const schema = z.object({
 		.url({ message: "Wprowadź poprawny link" }),
 });
 
-type Schema = z.infer<typeof schema>;
+export type Schema = z.infer<typeof schema>;
 
-export const LinkForm = ({ handleNextStep }: { handleNextStep: () => void }) => {
+type LinkFormProps = {
+	handleNextStep: () => void;
+};
+
+export const LinkForm = ({ handleNextStep }: LinkFormProps) => {
+	const { formValues, setFormValues } = useFormContext();
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-		resetField,
+		setValue,
 		watch,
 	} = useForm<Schema>({
 		resolver: zodResolver(schema),
+		defaultValues: {
+			href: formValues?.href,
+		},
 	});
 	const hrefIsFilled = watch("href")?.length >= 3;
 	const onSubmit = (data: Schema) => {
-		console.log(data);
-		alert("wszystko git");
+		// console.log(data, "data");
+		setFormValues((prev) => ({
+			...prev,
+			...data,
+		}));
 		handleNextStep();
 	};
 	return (
@@ -43,7 +56,9 @@ export const LinkForm = ({ handleNextStep }: { handleNextStep: () => void }) => 
 					/>
 					{hrefIsFilled && (
 						<button
-							onClick={() => resetField("href")}
+							onClick={() => {
+								setValue("href", "");
+							}}
 							className="absolute right-[8px] flex h-full  w-[32px] cursor-pointer items-center justify-center opacity-[0.5] "
 							type="button"
 						>
