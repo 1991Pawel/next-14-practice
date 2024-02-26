@@ -16,7 +16,7 @@ export const FormSteps = {
 export default function ItemPage() {
 	const [formValues, setFormValues] = useState({});
 	const steps = Object.values(FormSteps);
-	const [currentStep, setCurrentStep] = useState(steps[0]);
+	const [currentStep, setCurrentStep] = useState(steps[2]);
 	const currentStepIndex = steps.indexOf(currentStep);
 	const firstStep = steps[0];
 	const itsFirstStep = firstStep === currentStep;

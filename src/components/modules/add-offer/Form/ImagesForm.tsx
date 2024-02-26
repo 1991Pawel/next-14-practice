@@ -1,40 +1,33 @@
 "use client";
-import { X, Link } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-const schema = z.object({
-	href: z
-		.string()
-		.min(1, { message: "To pole jest wymagane" })
-		.url({ message: "Wprowadź poprawny link" }),
-});
-
-type Schema = z.infer<typeof schema>;
-
+import Dropzone from "react-dropzone";
 export const ImagesForm = ({ handleNextStep }: { handleNextStep: () => void }) => {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		resetField,
-		watch,
-	} = useForm<Schema>({
-		resolver: zodResolver(schema),
-	});
-	const hrefIsFilled = watch("href")?.length >= 3;
-	const onSubmit = (data: Schema) => {
-		alert("wszystko git");
-		console.log(data);
-	};
+	function handleOnChange(e: React.FormEvent<HTMLInputElement>) {
+		const target = e.target as HTMLInputElement & {
+			files: FileList;
+		};
+		console.log(target.files);
+	}
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<h2>Wyróżnij swoją okazję dzięki zdjęciom</h2>
-			Przeciągnij i upuść, aby dodać do 8 obrazków. Możesz zmieniać ich kolejność oraz wybrać
-			zdjęcie główne.
-		</form>
+		<section>
+			<div className="mt-7 rounded-lg border border-gray-300 p-4">
+				<div className="grid grid-cols-2 gap-4  md:grid-cols-3 lg:grid-cols-4">
+					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+				</div>
+			</div>
+
+			{/* <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+				{({ getRootProps, getInputProps }) => (
+					<section>
+						<div {...getRootProps()}>
+							<input {...getInputProps()} />
+							<p>Drag 'n' drop some files here, or click to select files</p>
+						</div>
+					</section>
+				)}
+			</Dropzone> */}
+		</section>
 	);
 };
