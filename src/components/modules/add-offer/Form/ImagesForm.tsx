@@ -1,21 +1,38 @@
 "use client";
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
-
+import { useForm, FormProvider } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FileInput } from "@/components/FileInput/FileInput";
-export const ImagesForm = ({ handleNextStep }: { handleNextStep: () => void }) => {
-	const methods = useForm({
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const schema = z.object({
+	pictures: z.array(z.any()).refine(
+		(files: File[]) => {
+			// Sprawdź, czy przynajmniej jeden plik został przesłany
+			if (!files || files.length === 0) return false;
+
+			const allImages = files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type));
+
+			const allUnderSizeLimit = files.every((file: File) => file?.size <= MAX_FILE_SIZE);
+
+			return allImages && allUnderSizeLimit;
+		},
+		{
+			message: `At least one image is required. Only .jpg, .jpeg, .png, and .webp files are accepted. Max file size is 5MB.`,
+		},
+	),
+});
+
+type Schema = z.infer<typeof schema>;
+
+export const ImagesForm = () => {
+	const methods = useForm<Schema>({
 		mode: "onBlur",
+		resolver: zodResolver(schema),
 	});
-	const onSubmit = methods.handleSubmit((values) => {
+	const onSubmit = (values: Schema) => {
 		console.log("values", values);
-		// Implement your own form submission logic here.
-	});
-	// function handleOnChange(e: React.FormEvent<HTMLInputElement>) {
-	// 	const target = e.target as HTMLInputElement & {
-	// 		files: FileList;
-	// 	};
-	// 	console.log(target.files);
-	// }
+	};
 
 	return (
 		<section>
@@ -23,24 +40,17 @@ export const ImagesForm = ({ handleNextStep }: { handleNextStep: () => void }) =
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
 					<FileInput
 						accept="image/png, image/jpg, image/jpeg"
-						multiple
 						name="pictures"
 						mode="append"
+						type="file"
 					/>
+
 					<button> wyślij</button>
+					{methods?.formState?.errors?.pictures && (
+						<div>{methods?.formState?.errors?.pictures?.message}</div>
+					)}
 				</form>
 			</FormProvider>
-
-			{/* <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
-				{({ getRootProps, getInputProps }) => (
-					<section>
-						<div {...getRootProps()}>
-							<input {...getInputProps()} />
-							<p>Drag 'n' drop some files here, or click to select files</p>
-						</div>
-					</section>
-				)}
-			</Dropzone> */}
 		</section>
 	);
 };

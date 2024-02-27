@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { type SyntheticEvent, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { X } from "lucide-react";
@@ -16,9 +16,13 @@ const PhotosPlaceholder = () => {
 	);
 };
 
-const Photos = ({ files, handleRemoveFile }) => {
-	console.log(files, "files");
-	const placeholderBox = () => {};
+type PhotosProps = {
+	files: File[];
+	handleRemoveFile: (e: SyntheticEvent, indexFileToRemove: number) => void;
+};
+
+const Photos = ({ files, handleRemoveFile }: PhotosProps) => {
+	const placeholdersNumber = 5;
 	if (!files?.length) {
 		return (
 			<div className="relative mt-7 rounded-lg border-2 border-dashed   border-gray-300 p-4">
@@ -27,16 +31,16 @@ const Photos = ({ files, handleRemoveFile }) => {
 						Dodaj obrazki
 					</Button>
 					<p className="mt-2 text-center text-sm">
-						lub preciagnij i upusé (Maksymany rozmiar pliku to 6 MB. Maksymany wymiar obrazka to
+						lub przeciągnij i upusć (Maksymany rozmiar pliku to 6 MB. Maksymany wymiar obrazka to
 						6000 px, a minimalny to 150 px)
 					</p>
 				</div>
 				<div className="grid grid-cols-2 gap-4  md:grid-cols-3 lg:grid-cols-4">
-					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
-					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
-					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
-					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
-					<div className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+					{Array(placeholdersNumber)
+						.fill(null)
+						.map((_, i) => (
+							<div key={i} className="h-32 rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56"></div>
+						))}
 				</div>
 			</div>
 		);
@@ -71,16 +75,23 @@ const Photos = ({ files, handleRemoveFile }) => {
 	}
 };
 
-export const FileInput = (props) => {
-	const { name, label = name, mode = "update" } = props;
+type FileInputProps = {
+	name: string;
+	mode: string;
+	accept?: string;
+	type: string;
+};
+
+export const FileInput = (props: FileInputProps) => {
+	const { name, mode = "update", accept } = props;
 
 	const { register, unregister, setValue, watch } = useFormContext();
 
-	const files = watch(name);
+	const files: File[] = watch(name) as File[];
 
 	const onDrop = useCallback(
-		(droppedFiles) => {
-			let newFiles = [];
+		(droppedFiles: File[]) => {
+			let newFiles: File[] = [];
 
 			if (mode === "update") {
 				newFiles = droppedFiles;
@@ -106,15 +117,16 @@ export const FileInput = (props) => {
 		[setValue, name, mode, files],
 	);
 
-	const handleRemoveFile = (e, indexFileToRemove) => {
+	const handleRemoveFile = (e: SyntheticEvent, indexFileToRemove: number) => {
 		e.stopPropagation();
+
 		const updatedFiles = files.filter((_, i) => i !== indexFileToRemove);
 		setValue(name, updatedFiles, { shouldValidate: false });
 	};
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+	const { getRootProps, getInputProps } = useDropzone({
 		onDrop,
-		accept: props.accept,
+		accept: { accepted: [accept ?? ""] },
 	});
 
 	useEffect(() => {
