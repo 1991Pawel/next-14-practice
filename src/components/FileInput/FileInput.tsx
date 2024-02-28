@@ -3,6 +3,7 @@ import React, { type SyntheticEvent, useCallback, useEffect } from "react";
 import { useDropzone, type Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { X, FolderDown } from "lucide-react";
+import { useFormContext as useFormContextApi } from "@/context/FormContext";
 import { Button } from "@/components/ui/button";
 
 const PhotosPlaceholder = () => {
@@ -59,6 +60,7 @@ const Photos = ({ files, handleRemoveFile, isDragActive }: PhotosProps) => {
 			</div>
 		);
 	}
+
 	return (
 		<div className="relative mt-7 rounded-lg border-2 border-dashed   border-gray-300 p-4">
 			<div className={`grid grid-cols-2 gap-4  md:grid-cols-3 lg:grid-cols-4 `}>
@@ -74,6 +76,7 @@ const Photos = ({ files, handleRemoveFile, isDragActive }: PhotosProps) => {
 							>
 								<X color="red" size={18} />
 							</div>
+
 							<img
 								className="block h-auto w-full object-contain"
 								src={URL.createObjectURL(file)}
@@ -105,10 +108,18 @@ type FileInputProps = {
 
 export const FileInput = (props: FileInputProps) => {
 	const { name, mode = "update", accept } = props;
-
 	const { register, unregister, setValue, watch } = useFormContext();
+	const { formValues, setFormValues } = useFormContextApi();
 
-	const files: File[] = watch(name) as File[];
+	const defaultFiles: File[] = formValues.images || [];
+	const files: File[] = watch(name, defaultFiles) as File[];
+
+	useEffect(() => {
+		setFormValues((prevState) => ({
+			...prevState,
+			images: files,
+		}));
+	}, [files]);
 
 	const onDrop = useCallback(
 		(droppedFiles: File[]) => {
