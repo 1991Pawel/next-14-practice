@@ -25,8 +25,6 @@ export const DetailsForm = ({ handleNextStep }: { handleNextStep: () => void }) 
 	});
 
 	const onSubmit = (data: Schema) => {
-		console.log(data);
-
 		handleNextStep();
 	};
 	return (

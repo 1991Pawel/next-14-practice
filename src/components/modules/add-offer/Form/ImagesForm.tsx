@@ -6,9 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FileInput } from "@/components/FileInput/FileInput";
 
 const schema = z.object({
-	pictures: z
-    .custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!")
-  });
+	pictures: z.custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!"),
+});
 type Schema = z.infer<typeof schema>;
 
 export const ImagesForm = ({ handleNextStep }) => {
@@ -18,7 +17,7 @@ export const ImagesForm = ({ handleNextStep }) => {
 		resolver: zodResolver(schema),
 	});
 	const onSubmit = (values: Schema) => {
-		console.log("przeszło walidacje", values);
+		// console.log("przeszło walidacje", values);
 		// setFormValues((prev) => ({
 		// 	...prev,
 		// 	...data,
@@ -30,7 +29,7 @@ export const ImagesForm = ({ handleNextStep }) => {
 		"image/png": [],
 	};
 
-	console.log(methods?.formState?.errors)
+	// console.log(methods?.formState?.errors);
 	return (
 		<section>
 			<FormProvider {...methods}>
@@ -39,9 +38,8 @@ export const ImagesForm = ({ handleNextStep }) => {
 
 					{methods?.formState?.errors?.pictures && (
 						<div>{methods?.formState?.errors?.pictures?.message}</div>
-						)}
-						<button> wyślij</button>
-				
+					)}
+					<button> wyślij</button>
 				</form>
 			</FormProvider>
 		</section>

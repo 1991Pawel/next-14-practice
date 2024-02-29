@@ -1,5 +1,5 @@
 "use client";
-import React, { type SyntheticEvent, useCallback, useEffect } from "react";
+import React, { type SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useDropzone, type Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { X, FolderDown } from "lucide-react";
@@ -25,7 +25,14 @@ type PhotosProps = {
 	isDragActive: boolean;
 };
 
-const Photos = ({ files, handleRemoveFile, isDragActive }: PhotosProps) => {
+const Photos = ({
+	files,
+	handleRemoveFile,
+	isDragActive,
+	handleDragOver,
+	handleDragStart,
+	handleDragEnd,
+}: PhotosProps) => {
 	const placeholdersNumber = 5;
 
 	if (!files?.length) {
@@ -69,6 +76,9 @@ const Photos = ({ files, handleRemoveFile, isDragActive }: PhotosProps) => {
 				{files.map((file, index) => {
 					return (
 						<div
+							onDragStart={(e) => handleDragStart(e, index)}
+							onDrop={(e) => handleDragOver(e, index)}
+							onDragEnd={handleDragEnd}
 							className={`relative flex h-32 justify-center  rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56 ${isDragActive ? "opacity-0" : ""}`}
 							key={file.name}
 						>
@@ -118,16 +128,48 @@ export const FileInput = (props: FileInputProps) => {
 	const { name, mode = "update", accept } = props;
 	const { register, unregister, setValue, watch } = useFormContext();
 	const { formValues, setFormValues } = useOfferFormContext();
+	const [indexDraggedElement, setIndexDraggedElement] = useState(null);
+	const canChangeOrder = (formValues?.pictures?.length ?? 0) >= 2;
 
-	const defaultFiles: File[] = formValues?.picutes || [];
+	const defaultFiles: File[] = formValues?.pictures || [];
 	const files: File[] = watch(name, defaultFiles) as File[];
 
 	useEffect(() => {
 		setFormValues((prevState) => ({
 			...prevState!,
-			picutes: files,
+			[name]: files,
 		}));
 	}, [files, setFormValues]);
+
+	const handleDragStart = (e, index) => {
+		console.log(index, "index");
+		if (canChangeOrder) {
+			setIndexDraggedElement(index);
+		}
+	};
+	const handleDragEnd = () => {
+		setIndexDraggedElement(null);
+	};
+
+	const handleDragOver = (e, index) => {
+		console.log(index);
+		console.log({ indexDraggedElement, index });
+		if (canChangeOrder && indexDraggedElement !== null) {
+			const deepCopy = structuredClone(files);
+			console.log(deepCopy, "BEFORE ?UPDATE");
+
+			const temp = deepCopy[indexDraggedElement];
+
+			deepCopy[indexDraggedElement] = deepCopy[index];
+			deepCopy[index] = temp;
+
+			console.log(deepCopy, "UPDATE");
+
+			console.log(temp, "TEMP");
+
+			setValue(name, deepCopy);
+		}
+	};
 
 	const onDrop = useCallback(
 		(droppedFiles: File[]) => {
@@ -180,13 +222,19 @@ export const FileInput = (props: FileInputProps) => {
 		<div>
 			<div {...getRootProps()}>
 				<input
-					// {...props}
+					{...props}
 					className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
 					id={name}
 					{...getInputProps()}
 				/>
 
-				<Photos isDragActive={isDragActive} handleRemoveFile={handleRemoveFile} files={files} />
+				<Photos
+					handleDragStart={handleDragStart}
+					handleDragOver={handleDragOver}
+					isDragActive={isDragActive}
+					handleRemoveFile={handleRemoveFile}
+					files={files}
+				/>
 			</div>
 		</div>
 	);

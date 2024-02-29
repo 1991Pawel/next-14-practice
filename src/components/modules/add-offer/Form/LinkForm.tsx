@@ -5,8 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {  useOfferFormContext } from "@/context/OfferFormContext";
-
+import { useOfferFormContext } from "@/context/OfferFormContext";
 
 const schema = z.object({
 	href: z
@@ -42,9 +41,10 @@ export const LinkForm = ({ handleNextStep }: LinkFormProps) => {
 			//ts
 			...prev!,
 			...data,
-		  }));
+		}));
 		handleNextStep();
 	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="mt-8 flex gap-5">
