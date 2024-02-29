@@ -112,43 +112,43 @@ export const FileInput = (props: FileInputProps) => {
 	const { register, unregister, setValue, watch } = useFormContext();
 	const { formValues, setFormValues } = useOfferFormContext();
 
-	const defaultFiles: File[] = formValues.images || [];
+	const defaultFiles: File[] = formValues?.picutes || [];
 	const files: File[] = watch(name, defaultFiles) as File[];
 
 	useEffect(() => {
 		setFormValues((prevState) => ({
-			...prevState,
-			images: files,
+			...prevState!,
+			picutes: files,
 		}));
-	}, [files]);
+	}, [files,setFormValues]);
 
 	const onDrop = useCallback(
 		(droppedFiles: File[]) => {
-			let newFiles: File[] = [];
-
-			if (mode === "update") {
-				newFiles = droppedFiles;
-			} else if (mode === "append") {
-				newFiles = droppedFiles.reduce(
-					(accumulator, file) => {
-						const isFileAlreadyAdded = accumulator.some((existingFile) =>
-							Object.entries(existingFile).every(([key, value]) => file[key] === value),
-						);
-
-						if (!isFileAlreadyAdded) {
-							accumulator.push(file);
-						}
-
-						return accumulator;
-					},
-					[...(files || [])],
+		  let newFiles: File[] = [];
+	  
+		  if (mode === "update") {
+			newFiles = droppedFiles;
+		  } else if (mode === "append") {
+			newFiles = droppedFiles.reduce(
+			  (accumulator, file) => {
+				const isFileAlreadyAdded = accumulator.some((existingFile) =>
+				  existingFile.name === file.name && existingFile.size === file.size,
 				);
-			}
-
-			setValue(name, newFiles, { shouldValidate: true });
+	  
+				if (!isFileAlreadyAdded) {
+				  accumulator.push(file);
+				}
+	  
+				return accumulator;
+			  },
+			  [...(files || [])],
+			);
+		  }
+	  
+		  setValue(name, newFiles, { shouldValidate: true });
 		},
 		[setValue, name, mode, files],
-	);
+	  );
 
 	const handleRemoveFile = (e: SyntheticEvent, indexFileToRemove: number) => {
 		e.stopPropagation();
@@ -173,7 +173,7 @@ export const FileInput = (props: FileInputProps) => {
 		<div>
 			<div {...getRootProps()}>
 				<input
-					{...props}
+					// {...props}
 					className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
 					id={name}
 					{...getInputProps()}

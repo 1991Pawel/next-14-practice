@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LinkForm } from "@/components/modules/add-offer/Form/LinkForm";
 import { DetailsForm } from "@/components/modules/add-offer/Form/DetailsForm";
 import { ImagesForm } from "@/components/modules/add-offer/Form/ImagesForm";
-import { OfferFormContextProvider } from "@/context/OfferFormContext";
+import { OfferFormContextProvider, useOfferFormContext } from "@/context/OfferFormContext";
 
 export const FormSteps = {
 	LINK: "LINK",
@@ -21,6 +21,7 @@ export default function ItemPage() {
 	const itsFirstStep = firstStep === currentStep;
 	const lastStep = steps[steps.length - 1];
 	const itsLastStep = currentStep === lastStep;
+	
 
 	const handleNextStep = () => {
 		if (!itsLastStep) {

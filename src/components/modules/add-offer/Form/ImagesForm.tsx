@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FileInput } from "@/components/FileInput/FileInput";
 
 const schema = z.object({
-	pictures: z.any().refine((val:[]) => val?.length, "File is required")
+	pictures: z
+    .custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!")
   });
 type Schema = z.infer<typeof schema>;
 

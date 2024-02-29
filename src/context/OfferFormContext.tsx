@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
 
 
-type FormValues ={
+export type FormValues ={
   href:string,
-  picutes:File[]
+  picutes:File[] | []
 }
 
 
@@ -24,6 +24,7 @@ export const OfferFormContextProvider = ({
   children,
 }: OfferFormContextProviderProps) => {
   const [formValues, setFormValues] = useState<FormValues>();
+  console.log(formValues,'FormValues')
 
   return (
     <OfferFormContext.Provider value={{ formValues, setFormValues }}>
