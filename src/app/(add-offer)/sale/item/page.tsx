@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LinkForm } from "@/components/modules/add-offer/Form/LinkForm";
 import { DetailsForm } from "@/components/modules/add-offer/Form/DetailsForm";
 import { ImagesForm } from "@/components/modules/add-offer/Form/ImagesForm";
-import { FormContext } from "@/context/FormContext";
+import { OfferFormContextProvider } from "@/context/OfferFormContext";
 
 export const FormSteps = {
 	LINK: "LINK",
@@ -14,7 +14,6 @@ export const FormSteps = {
 };
 
 export default function ItemPage() {
-	const [formValues, setFormValues] = useState({});
 	const steps = Object.values(FormSteps);
 	const [currentStep, setCurrentStep] = useState(steps[0]);
 	const currentStepIndex = steps.indexOf(currentStep);
@@ -36,13 +35,16 @@ export default function ItemPage() {
 
 	return (
 		<div>
-			<FormContext.Provider value={{ formValues, setFormValues }}>
+			<OfferFormContextProvider>
+		
 				{currentStep === FormSteps.LINK && <LinkForm handleNextStep={handleNextStep} />}
 				{currentStep === FormSteps.DETAILS && <DetailsForm handleNextStep={handleNextStep} />}
 				{currentStep === FormSteps.IMAGES && <ImagesForm handleNextStep={handleNextStep} />}
 				{!itsFirstStep && <Button onClick={handlePrevStep}>cofnij</Button>}
 				{!itsFirstStep && <Button onClick={handleNextStep}>Dalej</Button>}
-			</FormContext.Provider>
+
+			</OfferFormContextProvider>
+	
 		</div>
 	);
 }

@@ -3,7 +3,8 @@ import React, { type SyntheticEvent, useCallback, useEffect } from "react";
 import { useDropzone, type Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { X, FolderDown } from "lucide-react";
-import { useFormContext as useFormContextApi } from "@/context/FormContext";
+
+import { useOfferFormContext } from "@/context/OfferFormContext";
 import { Button } from "@/components/ui/button";
 
 const PhotosPlaceholder = () => {
@@ -109,7 +110,7 @@ type FileInputProps = {
 export const FileInput = (props: FileInputProps) => {
 	const { name, mode = "update", accept } = props;
 	const { register, unregister, setValue, watch } = useFormContext();
-	const { formValues, setFormValues } = useFormContextApi();
+	const { formValues, setFormValues } = useOfferFormContext();
 
 	const defaultFiles: File[] = formValues.images || [];
 	const files: File[] = watch(name, defaultFiles) as File[];

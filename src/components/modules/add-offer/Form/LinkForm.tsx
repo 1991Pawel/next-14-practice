@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useFormContext } from "@/context/FormContext";
+
+import { useOfferFormContext } from "@/context/OfferFormContext";
 
 const schema = z.object({
 	href: z
@@ -21,7 +22,7 @@ type LinkFormProps = {
 };
 
 export const LinkForm = ({ handleNextStep }: LinkFormProps) => {
-	const { formValues, setFormValues } = useFormContext();
+	const { formValues, setFormValues } = useOfferFormContext();
 
 	const {
 		register,
