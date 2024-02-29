@@ -3,6 +3,7 @@ import React, { type SyntheticEvent, useCallback, useEffect } from "react";
 import { useDropzone, type Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { X, FolderDown } from "lucide-react";
+import Image from "next/image";
 
 import { useOfferFormContext } from "@/context/OfferFormContext";
 import { Button } from "@/components/ui/button";
@@ -78,10 +79,16 @@ const Photos = ({ files, handleRemoveFile, isDragActive }: PhotosProps) => {
 								<X color="red" size={18} />
 							</div>
 
-							<img
+							<Image
 								className="block h-auto w-full object-contain"
 								src={URL.createObjectURL(file)}
 								alt={file.name}
+								width={0}
+								height={0}
+								style={{
+									width: "100%",
+									height: "auto",
+								}}
 							/>
 						</div>
 					);
@@ -120,35 +127,35 @@ export const FileInput = (props: FileInputProps) => {
 			...prevState!,
 			picutes: files,
 		}));
-	}, [files,setFormValues]);
+	}, [files, setFormValues]);
 
 	const onDrop = useCallback(
 		(droppedFiles: File[]) => {
-		  let newFiles: File[] = [];
-	  
-		  if (mode === "update") {
-			newFiles = droppedFiles;
-		  } else if (mode === "append") {
-			newFiles = droppedFiles.reduce(
-			  (accumulator, file) => {
-				const isFileAlreadyAdded = accumulator.some((existingFile) =>
-				  existingFile.name === file.name && existingFile.size === file.size,
+			let newFiles: File[] = [];
+
+			if (mode === "update") {
+				newFiles = droppedFiles;
+			} else if (mode === "append") {
+				newFiles = droppedFiles.reduce(
+					(accumulator, file) => {
+						const isFileAlreadyAdded = accumulator.some(
+							(existingFile) => existingFile.name === file.name && existingFile.size === file.size,
+						);
+
+						if (!isFileAlreadyAdded) {
+							accumulator.push(file);
+						}
+
+						return accumulator;
+					},
+					[...(files || [])],
 				);
-	  
-				if (!isFileAlreadyAdded) {
-				  accumulator.push(file);
-				}
-	  
-				return accumulator;
-			  },
-			  [...(files || [])],
-			);
-		  }
-	  
-		  setValue(name, newFiles, { shouldValidate: true });
+			}
+
+			setValue(name, newFiles, { shouldValidate: true });
 		},
 		[setValue, name, mode, files],
-	  );
+	);
 
 	const handleRemoveFile = (e: SyntheticEvent, indexFileToRemove: number) => {
 		e.stopPropagation();
