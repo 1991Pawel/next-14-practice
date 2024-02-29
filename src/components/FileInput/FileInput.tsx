@@ -173,7 +173,7 @@ export const FileInput = (props: FileInputProps) => {
 		<div>
 			<div {...getRootProps()}>
 				<input
-					// {...props}
+					{...props}
 					className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
 					id={name}
 					{...getInputProps()}
