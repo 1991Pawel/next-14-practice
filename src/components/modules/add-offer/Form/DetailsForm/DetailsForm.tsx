@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const schema = z.object({
 	title: z.string().min(1, { message: "To pole jest wymagane" }),
-	price: z.z.string().min(1, { message: "To pole jest wymagane" }),
+	price: z.string().min(1, { message: "To pole jest wymagane" }),
 });
 
 type Schema = z.infer<typeof schema>;
