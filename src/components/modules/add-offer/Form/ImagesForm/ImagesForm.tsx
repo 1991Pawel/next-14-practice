@@ -2,8 +2,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { FileInput } from "@/components/FileInput/FileInput";
+import { PicturesInput } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesInput";
 
 const schema = z.object({
 	pictures: z.custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!"),
@@ -34,12 +33,11 @@ export const ImagesForm = ({ handleNextStep }) => {
 		<section>
 			<FormProvider {...methods}>
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
-					<FileInput accept={acceptFiles} name="pictures" mode="append" type="file" />
+					<PicturesInput accept={acceptFiles} name="pictures" mode="append" type="file" />
 
 					{methods?.formState?.errors?.pictures && (
 						<div>{methods?.formState?.errors?.pictures?.message}</div>
 					)}
-					<button> wyślij</button>
 				</form>
 			</FormProvider>
 		</section>

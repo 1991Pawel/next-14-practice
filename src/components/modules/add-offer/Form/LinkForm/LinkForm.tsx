@@ -35,13 +35,14 @@ export const LinkForm = ({ handleNextStep }: LinkFormProps) => {
 			href: formValues?.href,
 		},
 	});
+
 	const hrefIsFilled = watch("href")?.length >= 3;
 	const onSubmit = (data: Schema) => {
 		setFormValues((prev) => ({
-			//ts
 			...prev!,
 			...data,
 		}));
+		//check if  link exist  in  database
 		handleNextStep();
 	};
 

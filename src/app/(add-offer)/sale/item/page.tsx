@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { LinkForm } from "@/components/modules/add-offer/Form/LinkForm";
-import { DetailsForm } from "@/components/modules/add-offer/Form/DetailsForm";
-import { ImagesForm } from "@/components/modules/add-offer/Form/ImagesForm";
-import { OfferFormContextProvider, useOfferFormContext } from "@/context/OfferFormContext";
+import { LinkForm } from "@/components/modules/add-offer/Form/LinkForm/LinkForm";
+import { DetailsForm } from "@/components/modules/add-offer/Form/DetailsForm/DetailsForm";
+import { ImagesForm } from "@/components/modules/add-offer/Form/ImagesForm/ImagesForm";
+import { OfferFormContextProvider } from "@/context/OfferFormContext";
 
 export const FormSteps = {
 	LINK: "LINK",
@@ -21,7 +21,6 @@ export default function ItemPage() {
 	const itsFirstStep = firstStep === currentStep;
 	const lastStep = steps[steps.length - 1];
 	const itsLastStep = currentStep === lastStep;
-	
 
 	const handleNextStep = () => {
 		if (!itsLastStep) {
@@ -37,15 +36,12 @@ export default function ItemPage() {
 	return (
 		<div>
 			<OfferFormContextProvider>
-		
 				{currentStep === FormSteps.LINK && <LinkForm handleNextStep={handleNextStep} />}
 				{currentStep === FormSteps.DETAILS && <DetailsForm handleNextStep={handleNextStep} />}
 				{currentStep === FormSteps.IMAGES && <ImagesForm handleNextStep={handleNextStep} />}
 				{!itsFirstStep && <Button onClick={handlePrevStep}>cofnij</Button>}
 				{!itsFirstStep && <Button onClick={handleNextStep}>Dalej</Button>}
-
 			</OfferFormContextProvider>
-	
 		</div>
 	);
 }
