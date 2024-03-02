@@ -6,7 +6,7 @@ export type FormValues = {
 };
 
 type FormContextType = {
-	formValues: FormValues | undefined; // Tutaj należy ustawić odpowiedni typ dla formValues
+	formValues: FormValues | undefined;
 	setFormValues: React.Dispatch<React.SetStateAction<FormValues | undefined>>;
 };
 
