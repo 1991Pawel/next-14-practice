@@ -3,19 +3,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const schema = z.object({
-	title: z
-		.string()
-		.min(1, { message: "To pole jest wymagane" })
-		.url({ message: "Wprowadź poprawny link" }),
-
+	title: z.string().min(1, { message: "To pole jest wymagane" }),
 	price: z.z.string().min(1, { message: "To pole jest wymagane" }),
 });
 
 type Schema = z.infer<typeof schema>;
 
-export const DetailsForm = ({ handleNextStep }: { handleNextStep: () => void }) => {
+type DetailsFormProps = {
+	handlePrevStep: () => void;
+};
+export const DetailsForm = ({ handlePrevStep }: DetailsFormProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -25,7 +25,7 @@ export const DetailsForm = ({ handleNextStep }: { handleNextStep: () => void }) 
 	});
 
 	const onSubmit = (data: Schema) => {
-		handleNextStep();
+		console.log(data, "data");
 	};
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -54,6 +54,10 @@ export const DetailsForm = ({ handleNextStep }: { handleNextStep: () => void }) 
 			{errors.title?.message && (
 				<span className="mt-2 block text-xs text-red-500">{errors.title.message}</span>
 			)}
+			<Button type="button" onClick={handlePrevStep}>
+				cofnij
+			</Button>
+			<Button>wyślij</Button>
 		</form>
 	);
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { LinkForm } from "@/components/modules/add-offer/Form/LinkForm/LinkForm";
 import { DetailsForm } from "@/components/modules/add-offer/Form/DetailsForm/DetailsForm";
 import { ImagesForm } from "@/components/modules/add-offer/Form/ImagesForm/ImagesForm";
@@ -34,14 +33,12 @@ export default function ItemPage() {
 	};
 
 	return (
-		<div>
-			<OfferFormContextProvider>
-				{currentStep === FormSteps.LINK && <LinkForm handleNextStep={handleNextStep} />}
-				{currentStep === FormSteps.DETAILS && <DetailsForm handleNextStep={handleNextStep} />}
-				{currentStep === FormSteps.IMAGES && <ImagesForm handleNextStep={handleNextStep} />}
-				{!itsFirstStep && <Button onClick={handlePrevStep}>cofnij</Button>}
-				{!itsFirstStep && <Button onClick={handleNextStep}>Dalej</Button>}
-			</OfferFormContextProvider>
-		</div>
+		<OfferFormContextProvider>
+			{currentStep === FormSteps.LINK && <LinkForm handleNextStep={handleNextStep} />}
+			{currentStep === FormSteps.IMAGES && (
+				<ImagesForm handlePrevStep={handlePrevStep} handleNextStep={handleNextStep} />
+			)}
+			{currentStep === FormSteps.DETAILS && <DetailsForm handlePrevStep={handlePrevStep} />}
+		</OfferFormContextProvider>
 	);
 }

@@ -3,24 +3,26 @@ import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PicturesInput } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesInput";
-
+import { Button } from "@/components/ui/button";
 const schema = z.object({
 	pictures: z.custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!"),
 });
 type Schema = z.infer<typeof schema>;
 
-export const ImagesForm = ({ handleNextStep }) => {
+type ImagesFormProps = {
+	handlePrevStep: () => void;
+	handleNextStep: () => void;
+};
+
+export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) => {
 	// const { formValues, setFormValues } = useFormContext();
 	const methods = useForm<Schema>({
 		mode: "onBlur",
 		resolver: zodResolver(schema),
 	});
 	const onSubmit = (values: Schema) => {
-		// console.log("przeszło walidacje", values);
-		// setFormValues((prev) => ({
-		// 	...prev,
-		// 	...data,
-		// }));
+		console.log(values);
+		handleNextStep();
 	};
 
 	const acceptFiles = {
@@ -39,6 +41,8 @@ export const ImagesForm = ({ handleNextStep }) => {
 						<div>{methods?.formState?.errors?.pictures?.message}</div>
 					)}
 				</form>
+				<Button onClick={handlePrevStep}>cofnij</Button>
+				<Button onClick={handleNextStep}>Dalej</Button>
 			</FormProvider>
 		</section>
 	);
