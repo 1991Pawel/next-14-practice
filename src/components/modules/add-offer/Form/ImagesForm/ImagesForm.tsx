@@ -1,11 +1,11 @@
 "use client";
 import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useOfferFormContext } from "@/context/OfferFormContext";
 import { PicturesInput } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesInput";
 import { Button } from "@/components/ui/button";
 const schema = z.object({
-	pictures: z.custom<FileList>().refine((val) => val?.length, "Zdjecia są wymagane!"),
+	pictures: z.custom<File[]>().refine((val) => val?.length, "Zdjecia są wymagane!"),
 });
 type Schema = z.infer<typeof schema>;
 
@@ -15,14 +15,17 @@ type ImagesFormProps = {
 };
 
 export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) => {
-	// const { formValues, setFormValues } = useFormContext();
+	const { formValues } = useOfferFormContext();
+
 	const methods = useForm<Schema>({
 		mode: "onBlur",
-		resolver: zodResolver(schema),
+		defaultValues: {
+			pictures: [],
+		},
 	});
 	const onSubmit = (values: Schema) => {
-		console.log(values);
-		handleNextStep();
+		console.log(values, "fomr");
+		// handleNextStep();
 	};
 
 	const acceptFiles = {
@@ -30,7 +33,6 @@ export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) 
 		"image/png": [],
 	};
 
-	// console.log(methods?.formState?.errors);
 	return (
 		<section>
 			<FormProvider {...methods}>
@@ -40,9 +42,11 @@ export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) 
 					{methods?.formState?.errors?.pictures && (
 						<div>{methods?.formState?.errors?.pictures?.message}</div>
 					)}
+					<Button type="button" onClick={handlePrevStep}>
+						cofnij
+					</Button>
+					<Button>Dalej</Button>
 				</form>
-				<Button onClick={handlePrevStep}>cofnij</Button>
-				<Button onClick={handleNextStep}>Dalej</Button>
 			</FormProvider>
 		</section>
 	);
