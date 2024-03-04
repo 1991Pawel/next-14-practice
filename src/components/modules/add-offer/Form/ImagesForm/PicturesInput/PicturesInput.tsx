@@ -20,7 +20,16 @@ export const PicturesInput = (props: FileInputProps) => {
 	const canChangeOrder = (formValues?.pictures?.length ?? 0) >= 2;
 
 	const defaultFiles: File[] = formValues?.pictures || [];
-	const files: File[] = watch(name, defaultFiles) as File[];
+	const files: File[] = watch(name) as File[];
+
+	//hack
+	useEffect(() => {
+		console.log("fafa");
+		//pass  like that -> watch(name,defaultFiles) validation problem creates a porlbem with validation
+		if (!files?.length && defaultFiles.length > 0) {
+			setValue(name, defaultFiles, { shouldValidate: true });
+		}
+	}, []);
 
 	useEffect(() => {
 		setFormValues((prevState) => ({
@@ -28,6 +37,13 @@ export const PicturesInput = (props: FileInputProps) => {
 			[name]: files,
 		}));
 	}, [files, setFormValues, name]);
+
+	useEffect(() => {
+		register(name);
+		return () => {
+			unregister(name);
+		};
+	}, [register, unregister, name]);
 
 	const handleDragStart = (index: number) => {
 		if (canChangeOrder) {
@@ -85,13 +101,6 @@ export const PicturesInput = (props: FileInputProps) => {
 		onDrop,
 		accept: accept,
 	});
-
-	useEffect(() => {
-		register(name);
-		return () => {
-			unregister(name);
-		};
-	}, [register, unregister, name]);
 
 	return (
 		<div>

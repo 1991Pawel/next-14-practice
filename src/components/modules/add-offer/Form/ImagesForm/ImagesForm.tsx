@@ -1,6 +1,7 @@
 "use client";
 import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useOfferFormContext } from "@/context/OfferFormContext";
 import { PicturesInput } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesInput";
 import { Button } from "@/components/ui/button";
@@ -15,17 +16,13 @@ type ImagesFormProps = {
 };
 
 export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) => {
-	const { formValues } = useOfferFormContext();
-
 	const methods = useForm<Schema>({
 		mode: "onBlur",
-		defaultValues: {
-			pictures: [],
-		},
+		resolver: zodResolver(schema),
 	});
 	const onSubmit = (values: Schema) => {
-		console.log(values, "fomr");
-		// handleNextStep();
+		//if ok
+		handleNextStep();
 	};
 
 	const acceptFiles = {
