@@ -1,6 +1,7 @@
 import { FolderDown, X } from "lucide-react";
 import { type SyntheticEvent } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { PicturesFilePlaceholder } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesFilePlaceholder/PicturesFilePlaceholder";
 import { PicturesAdd } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesAdd/PicturesAdd";
 type PhotosProps = {
@@ -34,39 +35,40 @@ export const PicturesFile = ({
 			<div className={`grid grid-cols-2 gap-4  md:grid-cols-3 lg:grid-cols-4 `}>
 				{files.map((file, index) => {
 					return (
-						<div
-							onDragStart={() => handleDragStart(index)}
-							onDrop={() => handleOnDrop(index)}
-							className={`relative flex h-32 justify-center  rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56 ${isDragActive ? "opacity-0" : ""}`}
-							key={file.name}
-						>
+						<motion.div key={file.name} transition={{ duration: 0.3, delay: index * 0.1 }} layout>
 							<div
-								className="z-index-10 absolute right-[12px] top-0 flex h-[32px] w-[32px] -translate-y-1/2 cursor-pointer items-center justify-center justify-items-center rounded-full bg-red-100"
-								onClick={(e) => handleRemoveFile(e, index)}
+								onDragStart={() => handleDragStart(index)}
+								onDrop={() => handleOnDrop(index)}
+								className={`relative flex h-32 justify-center  rounded-lg bg-gray-100 sm:h-40 md:h-48 lg:h-56 ${isDragActive ? "opacity-0" : ""}`}
 							>
-								<X color="red" size={18} />
-							</div>
-
-							<Image
-								className="block h-auto w-full object-contain"
-								src={URL.createObjectURL(file)}
-								alt={file.name}
-								width={0}
-								height={0}
-								style={{
-									width: "100%",
-									height: "auto",
-								}}
-							/>
-							{index === 0 && (
 								<div
-									className="absolute bottom-0
-								w-full rounded-b-lg bg-orange-600 py-2   text-center text-xs text-white"
+									className="z-index-10 absolute right-[12px] top-0 flex h-[32px] w-[32px] -translate-y-1/2 cursor-pointer items-center justify-center justify-items-center rounded-full bg-red-100"
+									onClick={(e) => handleRemoveFile(e, index)}
 								>
-									zdjęcie główne
+									<X color="red" size={18} />
 								</div>
-							)}
-						</div>
+
+								<Image
+									className="block h-auto w-full object-contain"
+									src={URL.createObjectURL(file)}
+									alt={file.name}
+									width={0}
+									height={0}
+									style={{
+										width: "100%",
+										height: "auto",
+									}}
+								/>
+								{index === 0 && (
+									<div
+										className="absolute bottom-0
+								w-full rounded-b-lg bg-orange-600 py-2   text-center text-xs text-white"
+									>
+										zdjęcie główne
+									</div>
+								)}
+							</div>
+						</motion.div>
 					);
 				})}
 				<div

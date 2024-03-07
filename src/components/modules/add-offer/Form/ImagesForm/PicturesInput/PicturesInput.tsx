@@ -24,7 +24,6 @@ export const PicturesInput = (props: FileInputProps) => {
 
 	//hack
 	useEffect(() => {
-		console.log("fafa");
 		//pass  like that -> watch(name,defaultFiles) validation problem creates a porlbem with validation
 		if (!files?.length && defaultFiles.length > 0) {
 			setValue(name, defaultFiles, { shouldValidate: true });
@@ -69,16 +68,16 @@ export const PicturesInput = (props: FileInputProps) => {
 			if (mode === "update") {
 				newFiles = droppedFiles;
 			} else if (mode === "append") {
+				const uniqueFilesSet = new Set(
+					files?.map((existingFile) => existingFile.name + existingFile.size),
+				);
 				newFiles = droppedFiles.reduce(
 					(accumulator, file) => {
-						const isFileAlreadyAdded = accumulator.some(
-							(existingFile) => existingFile.name === file.name && existingFile.size === file.size,
-						);
-
-						if (!isFileAlreadyAdded) {
+						const fileKey = file.name + file.size;
+						if (!uniqueFilesSet.has(fileKey)) {
+							uniqueFilesSet.add(fileKey);
 							accumulator.push(file);
 						}
-
 						return accumulator;
 					},
 					[...(files || [])],
