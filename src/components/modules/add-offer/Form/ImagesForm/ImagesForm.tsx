@@ -21,7 +21,7 @@ export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) 
 	});
 	const onSubmit = (values: Schema) => {
 		//if ok
-		console.log(values)
+		console.log(values);
 		handleNextStep();
 	};
 

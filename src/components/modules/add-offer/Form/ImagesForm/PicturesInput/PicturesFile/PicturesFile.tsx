@@ -58,6 +58,14 @@ export const PicturesFile = ({
 									height: "auto",
 								}}
 							/>
+							{index === 0 && (
+								<div
+									className="absolute bottom-0
+								w-full rounded-b-lg bg-orange-600 py-2   text-center text-xs text-white"
+								>
+									zdjęcie główne
+								</div>
+							)}
 						</div>
 					);
 				})}
