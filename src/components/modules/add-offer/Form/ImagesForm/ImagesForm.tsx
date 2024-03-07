@@ -2,7 +2,6 @@
 import { useForm, FormProvider } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useOfferFormContext } from "@/context/OfferFormContext";
 import { PicturesInput } from "@/components/modules/add-offer/Form/ImagesForm/PicturesInput/PicturesInput";
 import { Button } from "@/components/ui/button";
 const schema = z.object({
@@ -22,6 +21,7 @@ export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) 
 	});
 	const onSubmit = (values: Schema) => {
 		//if ok
+		console.log(values)
 		handleNextStep();
 	};
 

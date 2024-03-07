@@ -5,13 +5,23 @@ export type FormValues = {
 	pictures: File[];
 };
 
-type FormContextType = {
-	formValues: FormValues | undefined;
-	setFormValues: React.Dispatch<React.SetStateAction<FormValues | undefined>>;
+export const FormSteps = {
+	LINK: "LINK",
+	IMAGES: "IMAGES",
+	DETAILS: "DETAILS",
 };
 
 type OfferFormContextProviderProps = {
 	children: React.ReactNode;
+};
+type CurrentStep = keyof typeof FormSteps;
+
+type FormContextType = {
+	formValues: FormValues | undefined;
+	setFormValues: React.Dispatch<React.SetStateAction<FormValues | undefined>>;
+	currentStep: CurrentStep;
+	handleNextStep: () => void;
+	handlePrevStep: () => void;
 };
 
 export const OfferFormContext = createContext<FormContextType | undefined>(undefined);
@@ -19,11 +29,34 @@ export const OfferFormContext = createContext<FormContextType | undefined>(undef
 export const OfferFormContextProvider = ({ children }: OfferFormContextProviderProps) => {
 	const [formValues, setFormValues] = useState<FormValues>();
 
-	return (
-		<OfferFormContext.Provider value={{ formValues, setFormValues }}>
-			{children}
-		</OfferFormContext.Provider>
-	);
+	const steps = Object.values(FormSteps);
+	const [currentStep, setCurrentStep] = useState(steps[0]);
+	const currentStepIndex = steps.indexOf(currentStep);
+	const firstStep = steps[0];
+	const itsFirstStep = firstStep === currentStep;
+	const lastStep = steps[steps.length - 1];
+	const itsLastStep = currentStep === lastStep;
+
+	const handleNextStep = () => {
+		if (!itsLastStep) {
+			setCurrentStep(() => steps[currentStepIndex + 1]);
+		}
+	};
+	const handlePrevStep = () => {
+		if (!itsFirstStep) {
+			setCurrentStep(() => steps[currentStepIndex - 1]);
+		}
+	};
+
+	const contextValue: FormContextType = {
+		formValues,
+		setFormValues,
+		currentStep: currentStep as CurrentStep,
+		handleNextStep,
+		handlePrevStep,
+	};
+
+	return <OfferFormContext.Provider value={contextValue}>{children}</OfferFormContext.Provider>;
 };
 
 export function useOfferFormContext() {
