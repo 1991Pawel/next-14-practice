@@ -68,20 +68,11 @@ export const PicturesInput = (props: FileInputProps) => {
 			if (mode === "update") {
 				newFiles = droppedFiles;
 			} else if (mode === "append") {
-				const uniqueFilesSet = new Set(
+				const existingFilesSet = new Set(
 					files?.map((existingFile) => existingFile.name + existingFile.size),
 				);
-				newFiles = droppedFiles.reduce(
-					(accumulator, file) => {
-						const fileKey = file.name + file.size;
-						if (!uniqueFilesSet.has(fileKey)) {
-							uniqueFilesSet.add(fileKey);
-							accumulator.push(file);
-						}
-						return accumulator;
-					},
-					[...(files || [])],
-				);
+				newFiles = droppedFiles.filter((file) => !existingFilesSet.has(file.name + file.size));
+				newFiles = [...(files || []), ...newFiles];
 			}
 
 			setValue(name, newFiles, { shouldValidate: true });
@@ -96,14 +87,17 @@ export const PicturesInput = (props: FileInputProps) => {
 		setValue(name, updatedFiles, { shouldValidate: false });
 	};
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
 		onDrop,
 		accept: accept,
+		noDragEventsBubbling: true,
+		noClick: true,
+		noKeyboard: true,
 	});
 
 	return (
 		<div>
-			<div {...getRootProps()}>
+			<div {...getRootProps()} className="dropzone">
 				<input
 					className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
 					id={name}
@@ -116,6 +110,7 @@ export const PicturesInput = (props: FileInputProps) => {
 					isDragActive={isDragActive}
 					handleRemoveFile={handleRemoveFile}
 					files={files}
+					open={open}
 				/>
 			</div>
 		</div>

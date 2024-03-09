@@ -10,6 +10,7 @@ type PhotosProps = {
 	isDragActive: boolean;
 	handleOnDrop: (index: number) => void;
 	handleDragStart: (index: number) => void;
+	open: () => void;
 };
 
 export const PicturesFile = ({
@@ -18,6 +19,7 @@ export const PicturesFile = ({
 	isDragActive,
 	handleOnDrop,
 	handleDragStart,
+	open,
 }: PhotosProps) => {
 	const placeholdersNumber = 5;
 
@@ -26,6 +28,7 @@ export const PicturesFile = ({
 			<PicturesFilePlaceholder
 				isDragActive={isDragActive}
 				placeholdersNumber={placeholdersNumber}
+				open={open}
 			/>
 		);
 	}
@@ -80,7 +83,7 @@ export const PicturesFile = ({
 					Upuść plik tutaj
 				</div>
 
-				{!isDragActive && <PicturesAdd />}
+				{!isDragActive && <PicturesAdd open={open} />}
 			</div>
 		</div>
 	);

@@ -35,7 +35,6 @@ export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) 
 			<FormProvider {...methods}>
 				<form onSubmit={methods.handleSubmit(onSubmit)}>
 					<PicturesInput accept={acceptFiles} name="pictures" mode="append" type="file" />
-
 					{methods?.formState?.errors?.pictures && (
 						<div>{methods?.formState?.errors?.pictures?.message}</div>
 					)}

@@ -4,18 +4,20 @@ import { Button } from "@/components/ui/button";
 type PicturesFilePlaceholderProps = {
 	placeholdersNumber: number;
 	isDragActive: boolean;
+	open: () => void;
 };
 
 export const PicturesFilePlaceholder = ({
 	placeholdersNumber,
 	isDragActive,
+	open,
 }: PicturesFilePlaceholderProps) => {
 	return (
 		<div className="relative mt-7 rounded-lg border-2 border-dashed   border-gray-300 p-4">
 			<div
 				className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center ${isDragActive ? "opacity-0" : ""}`}
 			>
-				<Button className="" type="button">
+				<Button onClick={open} className="" type="button">
 					Dodaj obrazki
 				</Button>
 				<p className="mt-2 text-center text-sm">
