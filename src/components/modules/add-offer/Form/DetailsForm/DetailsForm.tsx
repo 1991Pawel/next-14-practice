@@ -24,7 +24,8 @@ export const DetailsForm = ({ handlePrevStep }: DetailsFormProps) => {
 	} = useForm<Schema>({
 		resolver: zodResolver(schema),
 	});
-	const titleLimit = 140 - watch("title")?.length;
+	const titleValue = watch("title");
+	const titleLimit = 140 - (titleValue?.length || 0);
 
 	const onSubmit = (data: Schema) => {
 		console.log(data, "data");
