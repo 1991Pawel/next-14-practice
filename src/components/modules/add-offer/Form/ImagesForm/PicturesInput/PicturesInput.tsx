@@ -25,7 +25,7 @@ export const PicturesInput = (props: FileInputProps) => {
 	//hack
 	useEffect(() => {
 		//pass  like that -> watch(name,defaultFiles) validation problem creates a porlbem with validation
-		if (!files?.length && defaultFiles.length > 0) {
+		if (defaultFiles) {
 			setValue(name, defaultFiles, { shouldValidate: true });
 		}
 	}, []);

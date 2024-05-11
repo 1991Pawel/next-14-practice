@@ -19,10 +19,12 @@ export const DetailsForm = ({ handlePrevStep }: DetailsFormProps) => {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm<Schema>({
 		resolver: zodResolver(schema),
 	});
+	const titleLimit = 140 - watch("title")?.length;
 
 	const onSubmit = (data: Schema) => {
 		console.log(data, "data");
@@ -32,9 +34,12 @@ export const DetailsForm = ({ handlePrevStep }: DetailsFormProps) => {
 			<h2 className="mt-10 text-center font-medium">Zacznijmy od tego, co najważniejsze</h2>
 			<div className="mt-8 flex gap-5">
 				<div className="w-full">
-					<label className="mb-2 block text-sm font-medium">
-						Tytuł
-						<span className="ml-1 text-gray-500">(Wymagane)</span>
+					<label className="column mb-2  flex justify-between text-sm font-medium">
+						<div>
+							Tytuł
+							<span className="ml-1 text-gray-500">(Wymagane)</span>
+						</div>
+						<span className="ml-1 text-gray-500">{titleLimit}</span>
 					</label>
 					<Input
 						className="truncate "
