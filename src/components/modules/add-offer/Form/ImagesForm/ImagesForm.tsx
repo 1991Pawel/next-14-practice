@@ -16,7 +16,7 @@ type ImagesFormProps = {
 
 export const ImagesForm = ({ handleNextStep, handlePrevStep }: ImagesFormProps) => {
 	const methods = useForm<Schema>({
-		mode: "onBlur",
+		mode: "onSubmit",
 		resolver: zodResolver(schema),
 	});
 	const onSubmit = (values: Schema) => {
